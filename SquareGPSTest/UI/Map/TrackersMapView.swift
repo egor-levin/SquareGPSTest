@@ -84,24 +84,10 @@ struct TrackersMapView: View {
         .animation(.easeInOut(duration: 0.25), value: viewModel.isLoading)
         .animation(.easeInOut(duration: 0.25), value: viewModel.errorMessage)
         .animation(.easeInOut(duration: 0.25), value: viewModel.trackersOnMap)
-        .simultaneousGesture(
-            DragGesture(minimumDistance: 1)
-                .onChanged { _ in
-                    viewModel.cameraMovedByUser()
-                }
-        )
-        .simultaneousGesture(
-            MagnifyGesture()
-                .onChanged { _ in
-                    viewModel.cameraMovedByUser()
-                }
-        )
-        .simultaneousGesture(
-            TapGesture(count: 2)
-                .onEnded {
-                    viewModel.cameraMovedByUser()
-                }
-        )
+        .onChange(of: cameraPosition.positionedByUser) { _, positionedByUser in
+            guard positionedByUser else { return }
+            viewModel.cameraMovedByUser()
+        }
         .onChange(of: viewModel.cameraMode, initial: true) { _, _ in
             updateCameraPosition()
         }
