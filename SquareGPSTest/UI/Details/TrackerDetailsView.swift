@@ -18,14 +18,15 @@ struct TrackerDetailsView: View {
             LabeledContent("Label", value: viewModel.label)
             LabeledContent("Model", value: viewModel.model)
             LabeledContent("Device ID", value: viewModel.deviceId)
-            if let coordinate = viewModel.location?.coordinate {
+            if let location = viewModel.location {
                 LabeledContent("Last coord") {
                     Text(
-                        String(format: "%.5f", coordinate.latitude)
+                        String(format: "%.5f", location.coordinate.latitude)
                         + ", "
-                        + String(format: "%.5f", coordinate.longitude)
+                        + String(format: "%.5f", location.coordinate.longitude)
                     )
                 }
+                LabeledContent("Last heading", value: "\(location.course)")
             }
             Button {
                 viewModel.mapButtonTapped()
